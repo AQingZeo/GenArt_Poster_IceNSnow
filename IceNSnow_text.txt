@@ -2,11 +2,11 @@ Ice and snow are both solid states of H2O but differ in structure, formation, an
 Ice is dense and compact, formed by freezing liquid water, with a typical density of approx 917 kg/m^3.  
 It appears as sheets, blocks, or icicles.  
 Snow forms when water vapor deposits directly into ice crystals in the atmosphere, creating porous, hexagonal flakes with much lower density, ranging from 50 to 600 kg/m^3.  
-This density relationship can be written as: rho_snow = rho_ice * phi, where phi ∈ [0.05, 0.65].  
+This density relationship can be written as: rho_snow = rho_ice * phi, where phi = [0.05, 0.65].  
 Ice is usually translucent, while snow appears white due to air pockets scattering light.  
 Both undergo phase transition at Lf = 334 kJ/kg (latent heat of fusion).  
-Snow insulates better due to low thermal conductivity: k_snow ≈ 0.05 W/mK vs k_ice ≈ 2.2 W/mK.  
+Snow insulates better due to low thermal conductivity: k_snow = 0.05 W/mK vs k_ice = 2.2 W/mK.  
 Heat flow follows Fourier’s Law: q = -k * grad(T).  
-Albedo values differ: snow ≈ 0.8–0.9, ice ≈ 0.3–0.6, affecting heat absorption.  
-Snowflakes often exhibit fractal geometry, modeled with Koch-type curves, fractal dimension D ∈ [1.7, 2.0].  
+Albedo values differ: snow = 0.8–0.9, ice = 0.3–0.6, affecting heat absorption.  
+Snowflakes often exhibit fractal geometry, modeled with Koch-type curves, fractal dimension D = [1.7, 2.0].  
 Snow melts faster than ice due to its high surface-area-to-volume ratio.

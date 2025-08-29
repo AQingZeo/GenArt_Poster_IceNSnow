@@ -10,9 +10,15 @@ export class Crystalizer {
     const requirePassHalf = this.config.crystalizer.requirePassHalf !== false;
     const halfY = this.config.canvas.height * (this.config.crystalizer.passHalfRatio ?? 0.5);
     const lineWeight = this.config.crystalizer.lineWeightPt;
+    const opacityCfg = this.config.crystalizer.opacity;
+    let alpha = 255;
+    if (typeof opacityCfg === 'number') {
+      alpha = opacityCfg <= 1 ? Math.round(255 * opacityCfg) : Math.round(opacityCfg);
+      alpha = Math.max(0, Math.min(255, alpha));
+    }
 
     p.push();
-    p.stroke(255);
+    p.stroke(255, alpha);
     p.strokeWeight(lineWeight);
 
     // Mark bodies that have passed halfway

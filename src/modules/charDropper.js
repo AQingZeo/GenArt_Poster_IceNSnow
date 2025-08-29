@@ -1,10 +1,10 @@
 const { Engine, World, Bodies, Runner } = (typeof Matter !== 'undefined' ? Matter : window.Matter);
 
 export class CharDropper {
-  constructor(p, config, positionCalculator) {
+  constructor(p, config, positionProvider) {
     this.p = p;
     this.config = config;
-    this.positionCalculator = positionCalculator;
+    this.positionProvider = positionProvider;
     this.engine = Engine.create();
     this.engine.world.gravity.y = config.dropper.gravityY;
     this.runner = Runner.create();
@@ -39,12 +39,29 @@ export class CharDropper {
     Runner.run(this.runner, this.engine);
   }
 
+  isUppercaseLetter(ch) {
+    return typeof ch === 'string' && ch.length > 0 && /[A-Z]/.test(ch[0]);
+  }
+
   addCharacter(ch) {
-    const x = this.positionCalculator.getXForChar(ch);
+    let x;
+    let angle;
+    if (typeof this.positionProvider.getNext === 'function') {
+      const next = this.positionProvider.getNext(ch);
+      x = next?.x ?? 0;
+      angle = next?.angle;
+    } else {
+      x = this.positionProvider.getXForChar(ch);
+    }
     const y = -50;
-    const size = this.config.font.sizePt;
-    const angle = ((Math.random() * 2 - 1) * this.config.dropper.rotationDeg * Math.PI) / 180;
-    const body = Bodies.rectangle(x, y, size, size, {
+    const baseSize = this.config.font.sizePt;
+    const capSize = this.config.font.capSizePt || baseSize;
+    const size = this.isUppercaseLetter(ch) ? capSize : baseSize;
+    const scale = this.config.dropper.bodyScale || 1.0;
+    if (typeof angle !== 'number') {
+      angle = ((Math.random() * 2 - 1) * this.config.dropper.rotationDeg * Math.PI) / 180;
+    }
+    const body = Bodies.rectangle(x, y, size * scale, size * scale, {
       frictionAir: this.config.dropper.airFriction,
       friction: this.config.dropper.friction,
       density: this.config.dropper.density,
@@ -60,11 +77,16 @@ export class CharDropper {
     p.push();
     p.fill(255);
     p.noStroke();
-    p.textFont('Doto');
-    p.textSize(this.config.font.sizePt);
+    const famRaw = this.config.font?.dropFont || 'Doto';
+    const family = String(famRaw).split(',')[0].replace(/["']/g, '').trim();
+    p.textFont(family);
     p.textAlign(p.CENTER, p.CENTER);
     for (const body of this.bodies) {
       const ch = body.plugin?.char ?? '?';
+      const baseSize = this.config.font.sizePt;
+      const capSize = this.config.font.capSizePt || baseSize;
+      const size = this.isUppercaseLetter(ch) ? capSize : baseSize;
+      p.textSize(size);
       p.push();
       p.translate(body.position.x, body.position.y);
       p.rotate(body.angle);

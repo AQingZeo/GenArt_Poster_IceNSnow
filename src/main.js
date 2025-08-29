@@ -1,6 +1,7 @@
 import config from './config.js';
 import { loadLocalText, normalizeNewlines } from './utils/textLoader.js';
 import { PositionCalculator } from './modules/positionCalculator.js';
+import { StreamPositioner } from './modules/streamPositioner.js';
 import { renderBackground } from './modules/backgroundRenderer.js';
 import { CharDropper } from './modules/charDropper.js';
 import { Crystalizer } from './modules/crystalizer.js';
@@ -53,9 +54,10 @@ window.addEventListener('load', async () => {
 // p5 instance-mode sketch
 new p5((p) => {
   let preloadText = '';
-  let positionCalculator;
+  let positionProvider;
   let charDropper;
   let crystalizer;
+  let seqIndex = 0;
 
   p.preload = async () => {
     try {
@@ -75,16 +77,38 @@ new p5((p) => {
     p.noStroke();
     p.textFont('Doto');
 
-    positionCalculator = new PositionCalculator(config);
-    charDropper = new CharDropper(p, config, positionCalculator);
+    positionProvider = config.positioning.mode === 'stream'
+      ? new StreamPositioner(config)
+      : new PositionCalculator(config);
+    charDropper = new CharDropper(p, config, positionProvider);
     crystalizer = new Crystalizer(config);
 
+    let finished = false;
     const feed = () => {
       if (!flags.enableDropper) return;
+      if (finished) return;
       const batch = config.dropper.spawnBatchSize ?? 1;
       for (let k = 0; k < batch; k++) {
-        const nextIndex = Math.floor(p.random(preloadText.length));
-        const ch = preloadText[nextIndex];
+        let ch;
+        if (config.dropper.sequential) {
+          // Advance sequentially; skip newlines
+          while (true) {
+            if (seqIndex >= preloadText.length) {
+              if (config.dropper.loop) {
+                seqIndex = 0;
+              } else {
+                finished = true;
+                break;
+              }
+            }
+            ch = preloadText[seqIndex++];
+            if (ch !== '\n') break;
+          }
+        } else {
+          const nextIndex = Math.floor(p.random(preloadText.length));
+          ch = preloadText[nextIndex];
+        }
+        if (finished) break;
         if (ch && ch !== '\n') {
           charDropper.addCharacter(ch);
         }

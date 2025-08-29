@@ -17,7 +17,9 @@ export function renderBackground(p, text, config) {
   p.push();
   p.fill(255, alpha);
   p.noStroke();
-  p.textFont('Doto');
+  const bgFamRaw = config.backgroundText?.font || 'Doto';
+  const bgFamily = String(bgFamRaw).split(',')[0].replace(/["']/g, '').trim();
+  p.textFont(bgFamily);
   p.textSize(fontSizePt);
   p.textLeading(leadingPt);
   p.textAlign(p.RIGHT, p.TOP);

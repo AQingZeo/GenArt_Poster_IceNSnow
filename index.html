@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ice and Snow Invitational Exhibition</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Doto:wght@100..900&family=Jersey+10&display=swap" rel="stylesheet">
+    
+    <!-- External Libraries -->
+    <script src="p5.js"></script>
+    <script src="matter.js"></script>
+    
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #000;
+            overflow: hidden;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        #p5-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        
+        canvas {
+            border: 1px solid #333;
+            max-width: 100%;
+            max-height: 100vh;
+        }
+        
+        /* Loading indicator */
+        .loading {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 24px;
+            text-align: center;
+            z-index: 9999;
+        }
+        
+        .loading.hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="loading" id="loading">
+        <div>Loading Ice and Snow Project...</div>
+        <div style="font-size: 16px; margin-top: 10px; color: #ccc;">
+            Initializing modules and physics engine...
+        </div>
+    </div>
+    
+    <div id="p5-container"></div>
+    
+    <script type="module" src="src/main.js"></script>
+</body>
+</html>

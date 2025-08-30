@@ -8,8 +8,8 @@ const config = {
   },
   font: {
     family: "Doto, 'Jersey 10', system-ui, Arial, sans-serif",
-    sizePt: 80,
-    capSizePt: 100,
+    sizePt: 70,
+    capSizePt: 200,
     dropFont: 'Doto',
   },
   backgroundText: {
